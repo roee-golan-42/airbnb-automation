@@ -1,7 +1,7 @@
 from .base_page import BasePage
 
 
-class LoginPage(BasePage):
+class ResultsPage(BasePage):
     def __init__(self, page):
         super().__init__(page)
         self.username_input = page.locator("#username")
