@@ -1,5 +1,5 @@
 from .base_page import BasePage
-from playwright.sync_api import Page
+from playwright.sync_api import Page, Locator
 
 
 class MainPage(BasePage):
@@ -24,10 +24,15 @@ class MainPage(BasePage):
     def get_date_button(self, month: str, day: str):
         return self.page.locator(f"[data-state--date-string='2025-{month}-{day}']")
 
-    def increase_amount_of_gusts(self, number_of_gusts: int):
-        self.choose_amount_of_adults_component.locator(
+    def increase_amount_of_gusts(
+        self, choose_amount_of_gusts_component: Locator, number_of_gusts: int
+    ):
+        increase_button = choose_amount_of_gusts_component.locator(
             "[data-testid*='increase-button']"
-        ).click()
+        )
+
+        for i in range(number_of_gusts):
+            increase_button.click()
 
     def search_apartment(
         self,
@@ -42,4 +47,5 @@ class MainPage(BasePage):
         self.get_date_button(check_in_month, check_in_day).click(force=True)
         self.get_date_button(check_in_month, check_out_day).click(force=True)
         self.guests_button.click()
-        self.increase_amount_of_gusts(2)
+        self.increase_amount_of_gusts(self.choose_amount_of_adults_component, 2)
+        self.search_button.click()
