@@ -1,5 +1,6 @@
 playwright
 pytest
 pytest-playwright
+pytest-asyncio
 pytest-html
 pytest-xdist
