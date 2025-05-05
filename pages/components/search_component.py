@@ -22,6 +22,9 @@ class SearchComponent:
         self.choose_amount_of_adults_component = self.page.locator(
             "[data-testid='search-block-filter-stepper-row-adults']"
         )
+        self.choose_amount_of_children_component = self.page.locator(
+            "[data-testid='search-block-filter-stepper-row-children']"
+        )
 
     def get_date_button(self, year: str, month: str, day: str):
         return self.page.locator(f"[data-state--date-string='2025-{month}-{day}']")
@@ -51,6 +54,12 @@ class SearchComponent:
         await self.check_out_button.click()
 
     async def set_amount_of_adults(self, amount_of_adults: int):
+        await self.guests_button.click()
+        await self.increase_amount_of_guests(
+            self.choose_amount_of_adults_component, amount_of_adults
+        )
+
+    async def set_number_of_children(self, amount_of_adults: int):
         await self.guests_button.click()
         await self.increase_amount_of_guests(
             self.choose_amount_of_adults_component, amount_of_adults

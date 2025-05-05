@@ -33,4 +33,6 @@ class ApartmentComponent:
             print("Rating not found. (either 'new' or not exist)")
 
     async def get_link(self):
-        pass
+        return await self.father_element.locator(
+            "[aria-labelledby*='title']"
+        ).get_attribute("href")

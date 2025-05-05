@@ -7,7 +7,7 @@ def print_analyze_results(accumulated_apartment_data: List):
         accumulated_apartment_data, key=lambda apt: apt["rating"]
     )
     print(
-        f"""Total amount of apartments: {len(accumulated_apartment_data)}
+        f"""\nTotal amount of apartments: {len(accumulated_apartment_data)}
 Cheapest apartment: {cheapest_apartment}
 Highest rated apartment: {highest_rated_apartment}"""
     )
