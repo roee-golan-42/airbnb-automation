@@ -31,31 +31,36 @@ async def test_search_apartment(page: Page):
 
     search_params_to_exist_in_apartments_link = [
         f"adults={NUMBER_OF_ADULTS}",
+        f"children={NUMBER_OF_CHILDREN}",
     ]
-    # search_params_to_exist_in_apartments_link.append(
-    #     CHECK_IN_DATE
-    # )
-    #  search_params_to_exist_in_apartments_link.append(
-    #     CHECK_OUT_DATE
-    # )
 
     await results_page.map_results()
     await results_page.validate_apartments_links_matches_search_params(
         search_params_to_exist_in_apartments_link
     )
-    # await results_page.analyze_results()
 
     apartment_link = ""
     await main_page.goto(apartment_link)
 
-    price = await reservation_preview_component.get_price()
-    check_in_date = await reservation_preview_component.get_check_in_date()
-    check_out_date = await reservation_preview_component.get_check_out_date()
-
     await reservation_preview_component.guests_field.click()
-    number_of_adults = await reservation_preview_component.get_number_of_adults()
-    number_of_children = await reservation_preview_component.get_number_of_adults()
+    reservation_preview = {
+        "price": await reservation_preview_component.get_price(),
+        "check_in_date": await reservation_preview_component.get_check_in_date(),
+        "check_out_date": await reservation_preview_component.get_check_out_date(),
+        "number_of_adults": await reservation_preview_component.get_number_of_adults(),
+        "number_of_children": await reservation_preview_component.get_number_of_children(),
+    }
     await reservation_preview_component.guests_field.click()
+    print(reservation_preview)
 
-    assert number_of_adults == NUMBER_OF_ADULTS, ""
-    assert number_of_children == NUMBER_OF_CHILDREN, ""
+    assert (
+        reservation_preview["number_of_adults"] == NUMBER_OF_ADULTS
+    ), "Number of adults not matching the search param"
+    assert (
+        reservation_preview["number_of_children"] == NUMBER_OF_CHILDREN
+    ), "Number of children not matching the search param"
+
+    await reservation_preview_component.order_button.click()
+
+    # Validate reservation details again
+    # Enter a phone number with a prefix of your choice.

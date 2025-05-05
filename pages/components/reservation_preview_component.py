@@ -16,6 +16,7 @@ class ReservationPreviewComponent:
         self.number_of_children = self.page.get_by_test_id(
             "GuestPicker-book_it-form-children-stepper-value"
         )
+        self.order_button = self.page.get_by_test_id("homes-pdp-cta-btn")
 
     async def get_check_in_date(self):
         return await self.check_in_date.inner_text()
