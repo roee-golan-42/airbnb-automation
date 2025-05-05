@@ -58,9 +58,11 @@ class SearchComponent:
         await self.increase_amount_of_guests(
             self.choose_amount_of_adults_component, amount_of_adults
         )
+        await self.guests_button.click()
 
     async def set_number_of_children(self, amount_of_adults: int):
         await self.guests_button.click()
         await self.increase_amount_of_guests(
             self.choose_amount_of_adults_component, amount_of_adults
         )
+        await self.guests_button.click()
