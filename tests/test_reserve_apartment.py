@@ -1,5 +1,6 @@
 import pytest
 from pages.base_page import BasePage
+from pages.components.reservation_preview_component import ReservationPreviewComponent
 from pages.components.search_component import SearchComponent
 from pages.main_page import MainPage
 from playwright.async_api import Page
@@ -18,6 +19,7 @@ async def test_search_apartment(page: Page):
     main_page = MainPage(page)
     search_component = SearchComponent(page)
     results_page = ResultsPage(page)
+    reservation_preview_component = ReservationPreviewComponent(page)
 
     await main_page.goto("https://airbnb.com")
 
@@ -41,4 +43,19 @@ async def test_search_apartment(page: Page):
     await results_page.validate_apartments_links_matches_search_params(
         search_params_to_exist_in_apartments_link
     )
-    await results_page.analyze_results()
+    # await results_page.analyze_results()
+
+    apartment_link = ""
+    await main_page.goto(apartment_link)
+
+    price = await reservation_preview_component.get_price()
+    check_in_date = await reservation_preview_component.get_check_in_date()
+    check_out_date = await reservation_preview_component.get_check_out_date()
+
+    await reservation_preview_component.guests_field.click()
+    number_of_adults = await reservation_preview_component.get_number_of_adults()
+    number_of_children = await reservation_preview_component.get_number_of_adults()
+    await reservation_preview_component.guests_field.click()
+
+    assert number_of_adults == NUMBER_OF_ADULTS, ""
+    assert number_of_children == NUMBER_OF_CHILDREN, ""
