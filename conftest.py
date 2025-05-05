@@ -18,5 +18,8 @@ async def page(request):
         page = await context.new_page()
         yield page
 
-        await context.tracing.stop(path=trace_path)
+        try:
+            await context.tracing.stop(path=trace_path)
+        except Exception as e:
+            print(f"⚠️ Failed to stop tracing: {e}")
         await browser.close()
