@@ -20,6 +20,8 @@ pip install -r requirements.txt
 playwright install
 ```
 
+# Environment variables
+add file called ```.env``` and add environment variables from .env.example file
 # Run tests
 ```
 pytest
