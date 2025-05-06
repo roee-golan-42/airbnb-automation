@@ -10,8 +10,10 @@ async def page(request):
     trace_name = f"trace_{request.node.name}.zip"
     trace_path = os.path.join("traces", trace_name)
 
+    headless_env = os.getenv("HEADLESS", "false").lower() == "true"
+
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(headless=headless_env)
         context = await browser.new_context()
 
         await context.tracing.start(screenshots=True, snapshots=True, sources=True)

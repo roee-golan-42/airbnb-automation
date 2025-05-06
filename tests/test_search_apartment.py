@@ -1,55 +1,55 @@
-# import os
-# from dotenv import load_dotenv
-# import pytest
-# from pages.base_page import BasePage
-# from pages.components.search_component import SearchComponent
-# from pages.main_page import MainPage
-# from playwright.async_api import Page
+import os
+from dotenv import load_dotenv
+import pytest
+from pages.base_page import BasePage
+from pages.components.search_component import SearchComponent
+from pages.main_page import MainPage
+from playwright.async_api import Page
 
-# from pages.results_page import ResultsPage
+from pages.results_page import ResultsPage
 
-# load_dotenv()
+load_dotenv()
 
 
-# @pytest.mark.asyncio
-# async def test_search_apartment(page: Page):
-#     BASE_URL = str(os.getenv("AIRBNB_URL"))
-#     DESTINATION_NAME = "tel aviv"
-#     CHECK_IN_DATE = str(os.getenv("CHECK_IN_DATE"))
-#     CHECK_OUT_DATE = str(os.getenv("CHECK_OUT_DATE"))
-#     NUMBER_OF_ADULTS = 2
+@pytest.mark.asyncio
+async def test_search_apartment(page: Page):
+    BASE_URL = str(os.getenv("AIRBNB_URL"))
+    DESTINATION_NAME = "tel aviv"
+    CHECK_IN_DATE = str(os.getenv("CHECK_IN_DATE"))
+    CHECK_OUT_DATE = str(os.getenv("CHECK_OUT_DATE"))
+    NUMBER_OF_ADULTS = 2
 
-#     main_page = MainPage(page)
-#     search_component = SearchComponent(page)
-#     results_page = ResultsPage(page)
+    main_page = MainPage(page)
+    search_component = SearchComponent(page)
+    results_page = ResultsPage(page)
 
-#     await main_page.goto(BASE_URL)
+    await main_page.goto(BASE_URL)
 
-#     await search_component.enter_destination(DESTINATION_NAME)
-#     await search_component.choose_dates(CHECK_IN_DATE, CHECK_OUT_DATE)
-#     await search_component.set_amount_of_adults(NUMBER_OF_ADULTS)
-#     await search_component.search_button.click()
+    await search_component.enter_destination(DESTINATION_NAME)
+    await search_component.choose_dates(CHECK_IN_DATE, CHECK_OUT_DATE)
+    await search_component.set_amount_of_adults(NUMBER_OF_ADULTS)
+    await search_component.search_button.click()
 
-#     search_params_to_exist_in_results_page_link = [
-#         *DESTINATION_NAME.split(" "),
-#         CHECK_IN_DATE,
-#         CHECK_OUT_DATE,
-#         f"adults={NUMBER_OF_ADULTS}",
-#     ]
-#     await results_page.validate_page_link_matches_search_params(
-#         search_params_to_exist_in_results_page_link
-#     )
+    search_params_to_exist_in_results_page_link = [
+        *DESTINATION_NAME.split(" "),
+        CHECK_IN_DATE,
+        CHECK_OUT_DATE,
+        f"adults={NUMBER_OF_ADULTS}",
+    ]
+    await results_page.validate_page_link_matches_search_params(
+        search_params_to_exist_in_results_page_link
+    )
 
-#     await results_page.map_results()
+    await results_page.map_results()
 
-#     # due to recommended apartments in flexible dates that sometime appear and some times not, cannot assert check-in and check-out dates
-#     search_params_to_exist_in_apartments_link = [
-#         # CHECK_IN_DATE,
-#         # CHECK_OUT_DATE,
-#         f"adults={NUMBER_OF_ADULTS}",
-#     ]
-#     await results_page.validate_apartments_links_matches_search_params(
-#         search_params_to_exist_in_apartments_link
-#     )
+    # due to recommended apartments in flexible dates that sometime appear and some times not, cannot assert check-in and check-out dates
+    search_params_to_exist_in_apartments_link = [
+        # CHECK_IN_DATE,
+        # CHECK_OUT_DATE,
+        f"adults={NUMBER_OF_ADULTS}",
+    ]
+    await results_page.validate_apartments_links_matches_search_params(
+        search_params_to_exist_in_apartments_link
+    )
 
-#     results_page.analyze_results()
+    results_page.analyze_results()
