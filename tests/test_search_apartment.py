@@ -15,8 +15,8 @@
 # async def test_search_apartment(page: Page):
 #     BASE_URL = str(os.getenv("AIRBNB_URL"))
 #     DESTINATION_NAME = "tel aviv"
-#     CHECK_IN_DATE = "2025-06-01"
-#     CHECK_OUT_DATE = "2025-06-03"
+#     CHECK_IN_DATE = str(os.getenv("CHECK_IN_DATE"))
+#     CHECK_OUT_DATE = str(os.getenv("CHECK_OUT_DATE"))
 #     NUMBER_OF_ADULTS = 2
 
 #     main_page = MainPage(page)
