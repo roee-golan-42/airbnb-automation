@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import pytest
 from pages.base_page import BasePage
 from pages.components.reservation_preview_component import ReservationPreviewComponent
@@ -8,9 +10,12 @@ from playwright.async_api import Page
 from pages.reservation_page import ReservationPage
 from pages.results_page import ResultsPage
 
+load_dotenv()
+
 
 @pytest.mark.asyncio
 async def test_search_apartment(page: Page):
+    BASE_URL = str(os.getenv("AIRBNB_URL"))
     DESTINATION_NAME = "Tel Aviv"
     CHECK_IN_DATE = "2025-06-01"
     CHECK_OUT_DATE = "2025-06-03"
@@ -24,7 +29,7 @@ async def test_search_apartment(page: Page):
     reservation_preview_component = ReservationPreviewComponent(page)
     reservation_page = ReservationPage(page)
 
-    # await main_page.goto("https://airbnb.com")
+    # await main_page.goto(BASE_URL)
 
     # await search_component.enter_destination(DESTINATION_NAME)
     # await search_component.choose_dates(CHECK_IN_DATE, CHECK_OUT_DATE)
@@ -32,18 +37,21 @@ async def test_search_apartment(page: Page):
     # await search_component.set_number_of_children(NUMBER_OF_CHILDREN)
     # await search_component.search_button.click()
 
+    # await results_page.map_results()
+
     # search_params_to_exist_in_apartments_link = [
     #     f"adults={NUMBER_OF_ADULTS}",
     #     f"children={NUMBER_OF_CHILDREN}",
     # ]
-
-    # await results_page.map_results()
     # await results_page.validate_apartments_links_matches_search_params(
     #     search_params_to_exist_in_apartments_link
     # )
 
-    apartment_link = results_page.get_max_rated_apartment_link()
-    await main_page.goto(apartment_link)
+    # max_rated_apartment_link = results_page.get_max_rated_apartment_link()
+    # await main_page.goto(f"{BASE_URL}{max_rated_apartment_link}")
+    await main_page.goto(
+        "https://www.airbnb.com/rooms/850762551780873253?locale=en&adults=2&check_in=2025-05-08&check_out=2025-05-09&children=1&search_mode=regular_search&source_impression_id=p3_1746507344_P3rfnaXLhP5ZEBvC&previous_page_section_name=1000&federated_search_id=658ffde5-fcbb-4c17-a33d-9f8a88873b49"
+    )
 
     # Reservation preview in apartment page
 

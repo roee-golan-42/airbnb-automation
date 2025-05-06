@@ -4,3 +4,4 @@ pytest-playwright
 pytest-asyncio
 pytest-html
 pytest-xdist
+python-dotenv

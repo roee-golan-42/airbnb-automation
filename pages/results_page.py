@@ -17,6 +17,15 @@ class ResultsPage(BasePage):
     async def has_next_page(self):
         return await self.next_page_button.is_enabled()
 
+    async def validate_page_link_matches_search_params(
+        self, search_params_to_contain: list[str]
+    ):
+        link = self.page.url
+        for text in search_params_to_contain:
+            assert (
+                text in link
+            ), f"Error: search param '{text}' not exist in link '{link}'"
+
     async def wait_for_apartments_to_load(self):
         # Must wait for all apartment to exist, assuming there are at least 18 apartments in page, except the last
         if await self.has_next_page():
