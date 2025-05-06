@@ -7,7 +7,7 @@ class ReservationPreviewComponent:
         self.check_in_date = self.page.get_by_test_id("change-dates-checkIn")
         self.check_out_date = self.page.get_by_test_id("change-dates-checkOut")
         self.price_per_night = self.page.locator(
-            " [data-section-id='BOOK_IT_SIDEBAR'] [class='_hb913q']"
+            "[data-section-id='BOOK_IT_SIDEBAR'] [class='_hb913q']"
         )
         self.guests_field = self.page.locator("[aria-labelledby*='guests-label']")
         self.number_of_adults = self.page.get_by_test_id(
@@ -16,7 +16,9 @@ class ReservationPreviewComponent:
         self.number_of_children = self.page.get_by_test_id(
             "GuestPicker-book_it-form-children-stepper-value"
         )
-        self.order_button = self.page.get_by_test_id("homes-pdp-cta-btn")
+        self.order_button = self.page.locator(
+            "[data-section-id='BOOK_IT_SIDEBAR'] [data-testid='homes-pdp-cta-btn']"
+        )
 
     async def get_check_in_date(self):
         return await self.check_in_date.inner_text()
