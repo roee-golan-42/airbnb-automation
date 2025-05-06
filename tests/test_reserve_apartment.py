@@ -29,32 +29,35 @@ async def test_search_apartment(page: Page):
     reservation_preview_component = ReservationPreviewComponent(page)
     reservation_page = ReservationPage(page)
 
-    # await main_page.goto(BASE_URL)
+    await main_page.goto(BASE_URL)
 
-    # await search_component.enter_destination(DESTINATION_NAME)
-    # await search_component.choose_dates(CHECK_IN_DATE, CHECK_OUT_DATE)
-    # await search_component.set_amount_of_adults(NUMBER_OF_ADULTS)
-    # await search_component.set_number_of_children(NUMBER_OF_CHILDREN)
-    # await search_component.search_button.click()
+    await search_component.enter_destination(DESTINATION_NAME)
+    await search_component.choose_dates(CHECK_IN_DATE, CHECK_OUT_DATE)
+    await search_component.set_amount_of_adults(NUMBER_OF_ADULTS)
+    await search_component.set_number_of_children(NUMBER_OF_CHILDREN)
+    await search_component.search_button.click()
 
-    # await results_page.map_results()
-
-    # search_params_to_exist_in_apartments_link = [
-    #     f"adults={NUMBER_OF_ADULTS}",
-    #     f"children={NUMBER_OF_CHILDREN}",
-    # ]
-    # await results_page.validate_apartments_links_matches_search_params(
-    #     search_params_to_exist_in_apartments_link
-    # )
-
-    # max_rated_apartment_link = results_page.get_max_rated_apartment_link()
-    # await main_page.goto(f"{BASE_URL}{max_rated_apartment_link}")
-    await main_page.goto(
-        "https://www.airbnb.com/rooms/850762551780873253?locale=en&adults=2&check_in=2025-05-08&check_out=2025-05-09&children=1&search_mode=regular_search&source_impression_id=p3_1746507344_P3rfnaXLhP5ZEBvC&previous_page_section_name=1000&federated_search_id=658ffde5-fcbb-4c17-a33d-9f8a88873b49"
+    search_params_to_exist_in_results_page_link = [
+        *DESTINATION_NAME.split(" "),
+        CHECK_IN_DATE,
+        CHECK_OUT_DATE,
+        f"adults={NUMBER_OF_ADULTS}",
+        f"children={NUMBER_OF_CHILDREN}",
+    ]
+    await results_page.validate_page_link_matches_search_params(
+        search_params_to_exist_in_results_page_link
     )
 
+    await results_page.map_results()
+    max_rated_apartment_link = results_page.get_max_rated_apartment_link()
+    await main_page.goto(f"{BASE_URL}{max_rated_apartment_link}")
+    # await main_page.goto(
+    #     "https://www.airbnb.com/rooms/1402109121131668201?adults=2&check_in=2025-06-01&check_out=2025-06-02&children=1&search_mode=regular_search&source_impression_id=p3_1746550078_P3cQZoiMc3sCnNDq&previous_page_section_name=1000&federated_search_id=1928d60b-6e32-4c7d-a99b-d02be07ecdec"
+    # )
+    # await page.wait_for_timeout(1000000)
     # Reservation preview in apartment page
     await reservation_preview_component.wait_for_translate_popup_and_close()
+
     await reservation_preview_component.guests_field.click()
     reservation_preview_data = {
         "price": await reservation_preview_component.get_price(),
@@ -63,7 +66,8 @@ async def test_search_apartment(page: Page):
         "number_of_adults": await reservation_preview_component.get_number_of_adults(),
         "number_of_children": await reservation_preview_component.get_number_of_children(),
     }
-    await reservation_preview_component.guests_field.click()
+    await reservation_preview_component.guests_field.click(force=True)
+
     print(f"Reservation preview details: {reservation_preview_data}")
 
     assert (
@@ -73,17 +77,24 @@ async def test_search_apartment(page: Page):
         reservation_preview_data["number_of_children"] == NUMBER_OF_CHILDREN
     ), "Number of children not matching the search param"
 
-    await reservation_preview_component.order_button.click()
+    await reservation_preview_component.order_button.click(force=True)
 
     # Reservation page
-
     reservation_page_data = {
         "price": await reservation_page.get_price(),
         "dates": await reservation_page.get_dates(),
         "total_number_of_guests": await reservation_page.get_number_of_total_guests(),
     }
-    print(f"Reservation confirmation details: {reservation_page_data}")
+    print(f"\nReservation confirmation details: {reservation_page_data}")
 
-    # Validate reservation details again
+    assert (
+        reservation_preview_data["price"] == reservation_page_data["price"]
+    ), "Price per night is not match in reservation preview and confirmation page"
+    assert (
+        reservation_preview_data["number_of_adults"]
+        + reservation_preview_data["number_of_children"]
+    ) == reservation_page_data[
+        "total_number_of_guests"
+    ], "Total number of guests is not match in reservation preview and confirmation page"
 
     await reservation_page.phone_number_field.fill(PHONE_NUMBER)

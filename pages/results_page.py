@@ -20,6 +20,7 @@ class ResultsPage(BasePage):
     async def validate_page_link_matches_search_params(
         self, search_params_to_contain: list[str]
     ):
+        await self.apartments_locator.nth(1).wait_for(state="visible")
         link = self.page.url
         for text in search_params_to_contain:
             assert (
