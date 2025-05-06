@@ -4,6 +4,7 @@ from playwright.async_api import Page, Locator
 class ReservationPreviewComponent:
     def __init__(self, page: Page):
         self.page = page
+        self.translation_popup = self.page.get_by_test_id("translation-announce-modal")
         self.check_in_date = self.page.get_by_test_id("change-dates-checkIn")
         self.check_out_date = self.page.get_by_test_id("change-dates-checkOut")
         self.price_per_night = self.page.locator(
@@ -35,3 +36,10 @@ class ReservationPreviewComponent:
 
     async def get_number_of_children(self):
         return int(await self.number_of_children.inner_text())
+
+    async def wait_for_translate_popup_and_close(self):
+        try:
+            await self.translation_popup.wait_for(state="visible", timeout=4000)
+            await self.page.click("[data-section-id='TITLE_DEFAULT']", force=True)
+        except TimeoutError:
+            pass

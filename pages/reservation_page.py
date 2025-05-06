@@ -8,7 +8,7 @@ class ReservationPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
         self.dates = self.page.locator("[data-section-id='DATE_PICKER']")
-        self.number_of_guests = self.page.locator("[data-section-id='GUEST_PICKER'']")
+        self.number_of_guests = self.page.locator("[data-section-id='GUEST_PICKER']")
         self.price_per_night = self.page.get_by_test_id("pd-title-ACCOMMODATION")
         self.phone_number_field = self.page.get_by_test_id("login-signup-phonenumber")
 

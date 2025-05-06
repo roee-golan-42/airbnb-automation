@@ -54,8 +54,8 @@ async def test_search_apartment(page: Page):
     )
 
     # Reservation preview in apartment page
-
-    await reservation_preview_component.guests_field.click(force=True)
+    await reservation_preview_component.wait_for_translate_popup_and_close()
+    await reservation_preview_component.guests_field.click()
     reservation_preview_data = {
         "price": await reservation_preview_component.get_price(),
         "check_in_date": await reservation_preview_component.get_check_in_date(),
@@ -63,7 +63,7 @@ async def test_search_apartment(page: Page):
         "number_of_adults": await reservation_preview_component.get_number_of_adults(),
         "number_of_children": await reservation_preview_component.get_number_of_children(),
     }
-    await reservation_preview_component.guests_field.click(force=True)
+    await reservation_preview_component.guests_field.click()
     print(f"Reservation preview details: {reservation_preview_data}")
 
     assert (
@@ -73,7 +73,7 @@ async def test_search_apartment(page: Page):
         reservation_preview_data["number_of_children"] == NUMBER_OF_CHILDREN
     ), "Number of children not matching the search param"
 
-    await reservation_preview_component.order_button.click(force=True)
+    await reservation_preview_component.order_button.click()
 
     # Reservation page
 
@@ -82,7 +82,7 @@ async def test_search_apartment(page: Page):
         "dates": await reservation_page.get_dates(),
         "total_number_of_guests": await reservation_page.get_number_of_total_guests(),
     }
-    print(f"Reservation preview details: {reservation_page_data}")
+    print(f"Reservation confirmation details: {reservation_page_data}")
 
     # Validate reservation details again
 
