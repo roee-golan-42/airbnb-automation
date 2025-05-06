@@ -4,21 +4,24 @@ This repository contains automated UI tests using [Playwright](https://playwrigh
 
 ## ✅ Tests
 
-- `test_search_apartment.py`: Validates apartment search and reservation preview
-- `test_reservation_flow.py`: End-to-end reservation flow including form interaction
+- `test_search_apartment.py`: Validates apartment search and analyzing results
+- `test_reserve_apartment.py`: Search for highest rated apartment validate reservation process
 
 ## 🛠️ Setup Instructions
 
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourname/playwright-python-automation.git
-cd playwright-python-automation
+git clone https://github.com/roee-golan-42/airbnb-automation.git
+cd airbnb-automation
 
 
 pip install -r requirements.txt
 playwright install
+```
 
+# Run tests
+```
 pytest
 ```
 
