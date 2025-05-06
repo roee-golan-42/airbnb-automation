@@ -5,6 +5,7 @@ from pages.components.search_component import SearchComponent
 from pages.main_page import MainPage
 from playwright.async_api import Page
 
+from pages.reservation_page import ReservationPage
 from pages.results_page import ResultsPage
 
 
@@ -15,11 +16,13 @@ async def test_search_apartment(page: Page):
     CHECK_OUT_DATE = "2025-06-03"
     NUMBER_OF_ADULTS = 2
     NUMBER_OF_CHILDREN = 1
+    PHONE_NUMBER = "123456789"
 
     main_page = MainPage(page)
     search_component = SearchComponent(page)
     results_page = ResultsPage(page)
     reservation_preview_component = ReservationPreviewComponent(page)
+    reservation_page = ReservationPage(page)
 
     # await main_page.goto("https://airbnb.com")
 
@@ -39,11 +42,13 @@ async def test_search_apartment(page: Page):
     #     search_params_to_exist_in_apartments_link
     # )
 
-    apartment_link = "https://www.airbnb.com/rooms/850762551780873253?locale=en&adults=2&check_in=2025-05-08&check_out=2025-05-09&children=1&search_mode=regular_search&source_impression_id=p3_1746507344_P3rfnaXLhP5ZEBvC&previous_page_section_name=1000&federated_search_id=658ffde5-fcbb-4c17-a33d-9f8a88873b49"
+    apartment_link = results_page.get_max_rated_apartment_link()
     await main_page.goto(apartment_link)
 
+    # Reservation preview in apartment page
+
     await reservation_preview_component.guests_field.click(force=True)
-    reservation_preview = {
+    reservation_preview_data = {
         "price": await reservation_preview_component.get_price(),
         "check_in_date": await reservation_preview_component.get_check_in_date(),
         "check_out_date": await reservation_preview_component.get_check_out_date(),
@@ -51,16 +56,26 @@ async def test_search_apartment(page: Page):
         "number_of_children": await reservation_preview_component.get_number_of_children(),
     }
     await reservation_preview_component.guests_field.click(force=True)
-    print(f"Reservation preview details: {reservation_preview}")
+    print(f"Reservation preview details: {reservation_preview_data}")
 
     assert (
-        reservation_preview["number_of_adults"] == NUMBER_OF_ADULTS
+        reservation_preview_data["number_of_adults"] == NUMBER_OF_ADULTS
     ), "Number of adults not matching the search param"
     assert (
-        reservation_preview["number_of_children"] == NUMBER_OF_CHILDREN
+        reservation_preview_data["number_of_children"] == NUMBER_OF_CHILDREN
     ), "Number of children not matching the search param"
 
     await reservation_preview_component.order_button.click(force=True)
 
+    # Reservation page
+
+    reservation_page_data = {
+        "price": await reservation_page.get_price(),
+        "dates": await reservation_page.get_dates(),
+        "total_number_of_guests": await reservation_page.get_number_of_total_guests(),
+    }
+    print(f"Reservation preview details: {reservation_page_data}")
+
     # Validate reservation details again
-    # Enter a phone number with a prefix of your choice.
+
+    await reservation_page.phone_number_field.fill(PHONE_NUMBER)

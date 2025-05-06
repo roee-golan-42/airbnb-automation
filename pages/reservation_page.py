@@ -4,12 +4,13 @@ from .base_page import BasePage
 from playwright.async_api import Page
 
 
-class ResultsPage(BasePage):
+class ReservationPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
-        self.dates = page.locator("[data-section-id='DATE_PICKER']")
-        self.number_of_guests = page.locator("[data-section-id='GUEST_PICKER'']")
+        self.dates = self.page.locator("[data-section-id='DATE_PICKER']")
+        self.number_of_guests = self.page.locator("[data-section-id='GUEST_PICKER'']")
         self.price_per_night = self.page.get_by_test_id("pd-title-ACCOMMODATION")
+        self.phone_number_field = self.page.get_by_test_id("login-signup-phonenumber")
 
     async def get_dates(self):
         return (await self.dates.inner_text()).split("\n")[1].strip()

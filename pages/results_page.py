@@ -65,15 +65,24 @@ class ResultsPage(BasePage):
                     text in link
                 ), f"Error: search param '{text}' not exist in link '{link}'"
 
-    async def analyze_results(self):
-        cheapest_apartment = min(
-            self.accumulated_apartment_data, key=lambda apt: apt["price"]
-        )
+    def analyze_results(self):
+        if len(self.accumulated_apartment_data) > 0:
+            cheapest_apartment = min(
+                self.accumulated_apartment_data, key=lambda apt: apt["price"]
+            )
+            highest_rated_apartment = max(
+                self.accumulated_apartment_data, key=lambda apt: apt["rating"]
+            )
+            print(
+                f"""\nTotal amount of apartments: {len(self.accumulated_apartment_data)}
+\nCheapest apartment: {cheapest_apartment}
+\nHighest rated apartment: {highest_rated_apartment}"""
+            )
+        else:
+            print("Error analyzing results")
+
+    def get_max_rated_apartment_link(self):
         highest_rated_apartment = max(
             self.accumulated_apartment_data, key=lambda apt: apt["rating"]
         )
-        print(
-            f"""\nTotal amount of apartments: {len(self.accumulated_apartment_data)}
-\nCheapest apartment: {cheapest_apartment}
-\nHighest rated apartment: {highest_rated_apartment}"""
-        )
+        return highest_rated_apartment["link"]
